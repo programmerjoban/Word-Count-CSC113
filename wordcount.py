@@ -11,11 +11,9 @@ return open(fileName, "r")
 else:
 	print(“not a txt file”)
     exit(1)
-    def Read():
-    f = open(file, "r")
-    return f.read()
-
-    def Write():
-    f = open(file, "w")
-    return f.write(Read())
     
+
+def Write():
+g = open(file, "w")
+return g.write(Read())
+
