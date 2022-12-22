@@ -78,7 +78,6 @@ def main():
     #pool size is the number processor the user entered
     poolSize = args.numProcessors
 
-
     # Check if the file entered is a text file. If not exit the program
     if(not(inputFile.endswith(".txt"))): 
         print("not a textFile")
@@ -114,6 +113,7 @@ def main():
     # merge all Counters result from all processors
     for counter in results:
         frequencyCounter += counter
+
     # print the word and frequency in sorted format 
     for word, frequency in sorted(frequencyCounter.items()):
         print("{} : {}".format(word, frequency))
