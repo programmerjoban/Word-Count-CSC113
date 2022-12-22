@@ -40,3 +40,5 @@ To Run the Program:
         Example: run word count on HarryPotterSeriesTestFile.txt with 8 processes
         python wordCount.py HarryPotterSeriesTestFile.txt 8
 
+
+Note: The terminal may not show the entire output because there is a limit on how many line the terminal can show. Please configure your terminal to show more line of the output so that you can get all of the output.
