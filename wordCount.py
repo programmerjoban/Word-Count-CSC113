@@ -114,7 +114,10 @@ def main():
     # merge all Counters result from all processors
     for counter in results:
         frequencyCounter += counter
-
+    # print the word and frequency in sorted format 
+    for word, frequency in sorted(frequencyCounter.items()):
+        print("{} : {}".format(word, frequency))
+            
 
     # print the total execution time
     print("\n Execution time: "+ str(time.time() - t1))
