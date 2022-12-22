@@ -3,6 +3,9 @@ import time
 import string
 import os
 from itertools import islice
+import multiprocessing as mp
+import re
+from collections import Counter
 
 # break the large files into small files of 30000 lines
 size = 30000
@@ -28,6 +31,32 @@ def createSmallFiles(inputFile):
             # small file name format = filename_smallFileNumber.txt
             with open(inputFile.replace(".txt","_{}.txt".format(counter)), 'w', encoding="utf8") as outputFile:
                 outputFile.writelines(nextLines)
+
+# This function returns a Counter class that includes the wordList
+# The input is file name
+def countWords(fileName):
+    with open(fileName, 'r',encoding="utf8") as textfile:
+        # store all the words from line
+        wordList = []
+
+        # iterate through all line of small file and find words
+        for line in textfile:
+            # using string module remove the punctuations from line
+            # then using regex extract all of the words as a list
+            # then iterate through regex list and add each word to word list in lower case
+
+            cleanLine = re.sub(r"""
+               [!"#$%&'()*+,-./:\\;<=>?@[\]^_`{|}~]+  # Accept one or more copies of punctuation
+               \ *           # plus zero or more copies of a space,
+               """,
+               " ",          # and replace it with a single space
+               line, flags=re.VERBOSE)
+
+            for word in re.findall(r'[a-zA-z]+', cleanLine):
+                wordList.append(word.lower())
+
+        # finally return the count of each word
+        return Counter(wordList)
 
 def main():
     
@@ -68,6 +97,27 @@ def main():
     for files in os.listdir('.'):
         if files.startswith(inputFileName+"_"):
             smallFiles.append(os.path.join('.',files))
+
+    # create a multiprocessing object with number of processors the user entered 
+    p = mp.Pool(poolSize)
+
+    # use map reduce techique to divide the work evenly among processors
+    results = p.map(countWords, smallFiles)
+
+    # join and close all processors
+    p.close()
+    p.join()
+
+    #instantiate the counter class
+    frequencyCounter = Counter()
+
+    # merge all Counters result from all processors
+    for counter in results:
+        frequencyCounter += counter
+
+
+    # print the total execution time
+    print("\n Execution time: "+ str(time.time() - t1))
 
 #when the script runs it will excecute the main function
 if __name__ == "__main__":
